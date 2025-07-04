@@ -7,12 +7,19 @@ exports.handler = async (event) => {
   }
 
   try {
+    // Add timestamp to data
+    const data = JSON.parse(event.body);
+    data.updatedAt = new Date().toISOString();
+    
     // Save to public directory
-    fs.writeFileSync('public/data/tips.json', event.body);
+    fs.writeFileSync('public/data/tips.json', JSON.stringify(data));
     
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Tips updated successfully!' })
+      body: JSON.stringify({ 
+        message: 'Tips updated successfully!',
+        timestamp: data.updatedAt
+      })
     };
   } catch (error) {
     return {
