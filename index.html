@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weka Tips - Free Football Betting Tips</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">⚽</div>
+                    <div class="logo-text">
+                        <h1>Weka Tips</h1>
+                        <p>Free Football Betting Tips</p>
+                    </div>
+                </div>
+                <div class="success-rate">
+                    <div class="rate" id="successRate">--%</div>
+                    <p>Success Rate</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <div class="nav-links">
+                    <a href="#home">Home</a>
+                    <a href="#tips">Today's Tips</a>
+                    <a href="#about">About</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="number" id="totalTips">--</div>
+                    <div class="label">Total Tips</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number" id="winRate">--%</div>
+                    <div class="label">Win Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number" id="activeTips">--</div>
+                    <div class="label">Today's Tips</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number" id="followers">--</div>
+                    <div class="label">Followers</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Today's Premium Tips</h2>
+                    <p class="current-date" id="currentDate">Loading...</p>
+                </div>
+            </div>
+
+            <div class="matches-grid" id="matchesContainer">
+                <!-- Matches will be loaded here -->
+                <div class="no-matches">Loading matches...</div>
+            </div>
+
+            <!-- Disclaimer -->
+            <div class="disclaimer">
+                <div class="disclaimer-content">
+                    <div class="disclaimer-icon">⚠️</div>
+                    <div class="disclaimer-text">
+                        <h3>Important Disclaimer</h3>
+                        <p>Betting involves risk and should be done responsibly. These tips are for entertainment purposes only. Please gamble responsibly and never bet more than you can afford to lose. You must be 18+ to participate in betting activities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <h3>Weka Tips</h3>
+            <p>&copy; <span id="currentYear"></span> Weka Tips. All rights reserved. | Bet Responsibly | 18+</p>
+        </div>
+    </footer>
+
+    <script>
+        // Load matches from localStorage or use empty array
+        let matchData = JSON.parse(localStorage.getItem('matchData')) || [];
+
+        // Load matches on page load
+        function loadMatches() {
+            const container = document.getElementById('matchesContainer');
+            
+            if (matchData.length === 0) {
+                container.innerHTML = '<div class="no-matches">No matches available today. Check back later!</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            matchData.forEach((match, index) => {
+                const matchCard = createMatchCard(match, index);
+                container.appendChild(matchCard);
+            });
+
+            // Update stats
+            document.getElementById('activeTips').textContent = matchData.length;
+        }
+
+        // Create match card element
+        function createMatchCard(match, index) {
+            const card = document.createElement('div');
+            card.className = 'match-card';
+            
+            const confidenceClass = {
+                'High': 'confidence-high',
+                'Medium': 'confidence-medium',
+                'Very High': 'confidence-very-high'
+            };
+
+            card.innerHTML = `
+                <div class="match-header">
+                    <div class="match-info">
+                        <div class="match-icon">⚽</div>
+                        <div class="match-details">
+                            <h3>${match.league}</h3>
+                            <p>${match.time}</p>
+                        </div>
+                    </div>
+                    <span class="confidence-badge ${confidenceClass[match.confidence]}">
+                        ${match.confidence} Confidence
+                    </span>
+                </div>
+                
+                <div class="match-teams">
+                    <div class="teams-text">${match.homeTeam} vs ${match.awayTeam}</div>
+                    <div class="tip-container">
+                        TIP: ${match.tip}
+                    </div>
+                </div>
+                
+                <div class="match-stats">
+                    <div class="stats-row">
+                        <span class="odds-info">Odds: <span class="odds-value">${match.odds}</span></span>
+                        <span class="odds-info">Potential Return: <span class="odds-value">${(parseFloat(match.odds) * 100).toFixed(0)}%</span></span>
+                    </div>
+                </div>
+                
+                <div class="match-actions">
+                    <button class="btn btn-primary" onclick="placeBet('${match.homeTeam} vs ${match.awayTeam}')">
+                        Place Bet
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Update current date
+        function updateDate() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+            document.getElementById('currentYear').textContent = now.getFullYear();
+        }
+
+        // Button click handlers
+        function placeBet(match) {
+            alert(`This would redirect to your preferred betting platform for: ${match}\n\nRemember to bet responsibly!`);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDate();
+            loadMatches();
+        });
+    </script>
+</body>
+</html>
