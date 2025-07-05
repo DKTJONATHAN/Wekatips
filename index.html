@@ -4,139 +4,146 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weka Tips - Free Football Betting Tips</title>
-    <!-- CSS Links -->
-    <link rel="stylesheet" href="styles.css">
-    <!-- Cache Control -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <!-- Favicon (optional) -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <!-- Font Awesome (optional) -->
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts (optional) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Inline critical CSS (optional) */
-        .loading-spinner {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-50">
     <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <div class="logo-icon">⚽</div>
-                    <div class="logo-text">
-                        <h1>Weka Tips</h1>
-                        <p>Free Football Betting Tips</p>
+    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="bg-white rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                        <i class="fas fa-futbol text-blue-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">Weka Tips</h1>
+                        <p class="text-blue-100">Free Football Betting Tips</p>
                     </div>
                 </div>
-                <div class="success-rate">
-                    <div class="rate" id="successRate">--%</div>
-                    <p>Success Rate</p>
+                <div class="text-center md:text-right">
+                    <div class="text-3xl font-bold text-green-400" id="successRate">--%</div>
+                    <p class="text-blue-100">Success Rate</p>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Navigation -->
-    <nav class="nav">
-        <div class="container">
-            <div class="nav-content">
-                <div class="nav-links">
-                    <a href="#home">Home</a>
-                    <a href="#tips">Today's Tips</a>
-                    <a href="#about">About</a>
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center py-4">
+                <div class="flex space-x-6">
+                    <a href="#home" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+                    <a href="#tips" class="text-gray-700 hover:text-blue-600 font-medium">Today's Tips</a>
+                    <a href="#about" class="text-gray-700 hover:text-blue-600 font-medium">About</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Stats Bar -->
-    <section class="stats-bar">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="number" id="totalTips">--</div>
-                    <div class="label">Total Tips</div>
+    <section class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div class="p-4">
+                    <div class="text-2xl font-bold text-gray-800" id="totalTips">--</div>
+                    <div class="text-gray-600">Total Tips</div>
                 </div>
-                <div class="stat-item">
-                    <div class="number" id="winRate">--%</div>
-                    <div class="label">Win Rate</div>
+                <div class="p-4">
+                    <div class="text-2xl font-bold text-gray-800" id="winRate">--%</div>
+                    <div class="text-gray-600">Win Rate</div>
                 </div>
-                <div class="stat-item">
-                    <div class="number" id="activeTips">--</div>
-                    <div class="label">Today's Tips</div>
+                <div class="p-4">
+                    <div class="text-2xl font-bold text-gray-800" id="activeTips">--</div>
+                    <div class="text-gray-600">Today's Tips</div>
                 </div>
-                <div class="stat-item">
-                    <div class="number" id="followers">--</div>
-                    <div class="label">Followers</div>
+                <div class="p-4">
+                    <div class="text-2xl font-bold text-gray-800" id="followers">--</div>
+                    <div class="text-gray-600">Followers</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Main Content -->
-    <main class="main-content">
-        <div class="container">
-            <div class="section-header">
+    <main class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                 <div>
-                    <h2 class="section-title">Today's Premium Tips</h2>
-                    <p class="current-date" id="currentDate">Loading...</p>
-                    <p class="last-updated">Last updated: <span id="lastUpdatedTime">--:--</span> 
-                        <button onclick="loadMatches(true)" class="refresh-btn">Refresh Now</button>
+                    <h2 class="text-2xl font-bold text-gray-800">Today's Premium Tips</h2>
+                    <p class="text-gray-600" id="currentDate">Loading date...</p>
+                    <p class="text-sm text-gray-500 mt-2">
+                        Last updated: <span id="lastUpdatedTime">--:--</span>
+                        <button onclick="loadMatches(true)" class="ml-2 px-3 py-1 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition">
+                            <i class="fas fa-sync-alt mr-1"></i> Refresh
+                        </button>
                     </p>
                 </div>
             </div>
 
-            <div class="matches-grid" id="matchesContainer">
-                <div class="no-matches">Loading matches...</div>
-            </div>
-
-            <!-- Disclaimer -->
-            <div class="disclaimer">
-                <div class="disclaimer-content">
-                    <div class="disclaimer-icon">⚠️</div>
-                    <div class="disclaimer-text">
-                        <h3>Important Disclaimer</h3>
-                        <p>Betting involves risk and should be done responsibly. These tips are for entertainment purposes only. Please gamble responsibly and never bet more than you can afford to lose. You must be 18+ to participate in betting activities.</p>
+            <div id="matchesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="col-span-full text-center py-10">
+                    <div class="animate-pulse flex flex-col items-center">
+                        <i class="fas fa-circle-notch fa-spin text-blue-500 text-4xl mb-3"></i>
+                        <p class="text-gray-600">Loading matches...</p>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-triangle text-yellow-400 text-xl mt-1 mr-3"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium text-yellow-800">Important Disclaimer</h3>
+                    <p class="text-yellow-700 mt-1">
+                        Betting involves risk and should be done responsibly. These tips are for entertainment purposes only. 
+                        Please gamble responsibly and never bet more than you can afford to lose. You must be 18+ to participate in betting activities.
+                    </p>
                 </div>
             </div>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <h3>Weka Tips</h3>
-            <p>&copy; <span id="currentYear"></span> Weka Tips. All rights reserved. | Bet Responsibly | 18+</p>
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-xl font-bold mb-2">Weka Tips</h3>
+            <p class="text-gray-400">&copy; <span id="currentYear"></span> Weka Tips. All rights reserved. | Bet Responsibly | 18+</p>
         </div>
     </footer>
 
     <script>
-        // Configuration - Update these values
-        const REPO = 'your-username/your-repo-name'; // Format: username/repo
-        const FILE_PATH = 'data/tips.json'; // Path to your JSON file
-        const BRANCH = 'main'; // Your branch name
+        // Configuration - Update these to match your repo
+        const REPO = 'your-username/your-repo-name';
+        const FILE_PATH = 'data/tips.json';
+        const BRANCH = 'main';
 
         // Global variables
         let matchData = [];
         let lastFetchTime = null;
 
-        // Load matches on page load
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             updateDate();
             loadMatches();
-
+            
             // Refresh every 5 minutes
             setInterval(() => loadMatches(), 300000);
         });
@@ -144,16 +151,22 @@
         // Main loading function
         async function loadMatches(forceRefresh = false) {
             const container = document.getElementById('matchesContainer');
-            container.innerHTML = '<div class="no-matches">Loading matches...</div>';
+            container.innerHTML = `
+                <div class="col-span-full text-center py-10">
+                    <div class="animate-pulse flex flex-col items-center">
+                        <i class="fas fa-circle-notch fa-spin text-blue-500 text-4xl mb-3"></i>
+                        <p class="text-gray-600">Loading matches...</p>
+                    </div>
+                </div>
+            `;
 
             try {
-                // 1. Try loading from server first when forcing refresh
                 if (forceRefresh) {
                     await fetchMatches();
                     return;
                 }
 
-                // 2. Check if we have recent cached data (less than 5 minutes old)
+                // Check cache first
                 const cachedData = JSON.parse(localStorage.getItem('cachedMatchData'));
                 const cacheTime = localStorage.getItem('cacheTimestamp');
 
@@ -164,14 +177,19 @@
                     return;
                 }
 
-                // 3. Fetch fresh data from server
                 await fetchMatches();
 
             } catch (error) {
                 console.error("Loading error:", error);
                 container.innerHTML = `
-                    <div class="no-matches">
-                        Failed to load matches. <button onclick="loadMatches(true)">Retry</button>
+                    <div class="col-span-full text-center py-10">
+                        <div class="flex flex-col items-center">
+                            <i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-3"></i>
+                            <p class="text-gray-600 mb-4">Failed to load matches</p>
+                            <button onclick="loadMatches(true)" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                                <i class="fas fa-redo mr-2"></i> Try Again
+                            </button>
+                        </div>
                     </div>
                 `;
             }
@@ -180,9 +198,9 @@
         // Fetch matches from GitHub
         async function fetchMatches() {
             const response = await fetch(`https://raw.githubusercontent.com/${REPO}/${BRANCH}/${FILE_PATH}?t=${Date.now()}`);
-
+            
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             const data = await response.json();
@@ -225,54 +243,59 @@
         // Create match card element
         function createMatchCard(match, index) {
             const card = document.createElement('div');
-            card.className = 'match-card';
-
-            const confidenceClass = {
-                'High': 'confidence-high',
-                'Medium': 'confidence-medium',
-                'Very High': 'confidence-very-high'
-            };
+            card.className = 'bg-white rounded-lg shadow-md overflow-hidden fade-in';
+            
+            // Determine confidence badge color
+            let confidenceClass = '';
+            let confidenceColor = '';
+            if (match.confidence === 'High') {
+                confidenceClass = 'bg-green-100 text-green-800';
+                confidenceColor = 'text-green-500';
+            } else if (match.confidence === 'Medium') {
+                confidenceClass = 'bg-yellow-100 text-yellow-800';
+                confidenceColor = 'text-yellow-500';
+            } else if (match.confidence === 'Very High') {
+                confidenceClass = 'bg-blue-100 text-blue-800';
+                confidenceColor = 'text-blue-500';
+            }
 
             // Format the tip display
             const formattedTip = formatTipForDisplay(match.tip);
 
             card.innerHTML = `
-                <div class="match-header">
-                    <div class="match-info">
-                        <div class="match-icon">⚽</div>
-                        <div class="match-details">
-                            <h3>${match.league}</h3>
-                            <p>${match.time}</p>
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center">
+                            <div class="bg-gray-100 rounded-full w-10 h-10 flex items-center justify-center mr-3">
+                                <i class="fas fa-futbol ${confidenceColor}"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">${match.league}</h3>
+                                <p class="text-sm text-gray-500">${match.time}</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold ${confidenceClass}">
+                            ${match.confidence} Confidence
+                        </span>
+                    </div>
+                    
+                    <div class="text-center mb-4">
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">${match.homeTeam} vs ${match.awayTeam}</h4>
+                        <span class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg font-semibold">
+                            ${formattedTip}
+                        </span>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-3 mb-4">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Odds: <span class="font-bold text-gray-800">${match.odds}</span></span>
+                            <span class="text-gray-600">Return: <span class="font-bold text-gray-800">${(parseFloat(match.odds) * 100).toFixed(0)}%</span></span>
                         </div>
                     </div>
-                    <span class="confidence-badge ${confidenceClass[match.confidence]}">
-                        ${match.confidence} Confidence
-                    </span>
-                </div>
-                
-                <div class="match-teams">
-                    <div class="teams-text">${match.homeTeam} vs ${match.awayTeam}</div>
-                    <div class="tip-container">
-                        ${formattedTip}
-                    </div>
-                </div>
-                
-                <div class="match-stats">
-                    <div class="stats-row">
-                        <span class="odds-info">Odds: <span class="odds-value">${match.odds}</span></span>
-                        <span class="odds-info">Potential Return: <span class="odds-value">${(parseFloat(match.odds) * 100).toFixed(0)}%</span></span>
-                    </div>
-                </div>
-                
-                <div class="match-actions">
-                    <button class="btn btn-primary" onclick="placeBet({
-                        match: '${match.homeTeam} vs ${match.awayTeam}',
-                        tip: '${match.tip}',
-                        odds: '${match.odds}',
-                        league: '${match.league}',
-                        time: '${match.time}'
-                    })">
-                        Place Bet
+                    
+                    <button onclick="placeBet(${JSON.stringify(match).replace(/"/g, '&quot;')})" 
+                            class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-2 rounded-lg font-medium transition">
+                        <i class="fas fa-coins mr-2"></i> Place Bet
                     </button>
                 </div>
             `;
@@ -283,10 +306,10 @@
         // Format different tip types for display
         function formatTipForDisplay(tip) {
             if (tip.includes('Over')) {
-                const value = tip.match(/\d\.\d/)[0];
+                const value = tip.match(/\d\.\d/)?.[0] || 'X.5';
                 return `Over ${value} Goals`;
             } else if (tip.includes('Under')) {
-                const value = tip.match(/\d\.\d/)[0];
+                const value = tip.match(/\d\.\d/)?.[0] || 'X.5';
                 return `Under ${value} Goals`;
             } else if (tip.includes('BTTS - Yes')) {
                 return 'Both Teams To Score';
@@ -302,8 +325,18 @@
 
         // Show "no matches" message
         function showNoMatches() {
-            document.getElementById('matchesContainer').innerHTML = 
-                '<div class="no-matches">No matches available today. Check back later!</div>';
+            document.getElementById('matchesContainer').innerHTML = `
+                <div class="col-span-full text-center py-10">
+                    <div class="flex flex-col items-center">
+                        <i class="fas fa-calendar-times text-gray-400 text-4xl mb-3"></i>
+                        <h3 class="text-xl font-medium text-gray-700 mb-2">No Matches Today</h3>
+                        <p class="text-gray-500">Check back later for updated tips</p>
+                        <button onclick="loadMatches(true)" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                            <i class="fas fa-sync-alt mr-2"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+            `;
             document.getElementById('activeTips').textContent = '0';
             document.getElementById('lastUpdatedTime').textContent = '--:--';
         }
@@ -344,7 +377,18 @@
 
         // Place bet handler
         function placeBet(data) {
-            const message = `Recommended bet:\n\n${data.match}\nLeague: ${data.league}\nTime: ${data.time}\nTip: ${formatTipForDisplay(data.tip)}\nOdds: ${data.odds}\n\nRemember to bet responsibly!`;
+            const formattedTip = formatTipForDisplay(data.tip);
+            const message = `
+                Recommended bet:
+                \n\n${data.homeTeam} vs ${data.awayTeam}
+                \nLeague: ${data.league}
+                \nTime: ${data.time}
+                \nTip: ${formattedTip}
+                \nOdds: ${data.odds}
+                \nPotential Return: ${(parseFloat(data.odds) * 100).toFixed(0)}%
+                \n\nRemember to bet responsibly!
+            `;
+            
             alert(message);
         }
     </script>
