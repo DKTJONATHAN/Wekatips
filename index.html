@@ -37,6 +37,26 @@
         html {
             scroll-behavior: smooth;
         }
+
+        /* Social media icon style */
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .social-icon:hover {
+            transform: scale(1.1);
+        }
+        .social-icon img {
+            width: 24px;
+            height: 24px;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -82,18 +102,10 @@
     <!-- Stats Bar -->
     <section class="bg-white shadow-sm">
         <div class="container mx-auto px-4 py-4">
-            <div class="grid grid-cols-3 gap-2 md:gap-4 text-center">
-                <div class="p-2">
-                    <div class="text-xl md:text-2xl font-bold text-gray-800" id="winRate">--%</div>
-                    <div class="text-gray-600 text-xs md:text-sm">Win Rate</div>
-                </div>
+            <div class="grid grid-cols-1 gap-2 md:gap-4 text-center">
                 <div class="p-2">
                     <div class="text-xl md:text-2xl font-bold text-gray-800" id="activeTips">--</div>
                     <div class="text-gray-600 text-xs md:text-sm">Today's Tips</div>
-                </div>
-                <div class="p-2">
-                    <div class="text-xl md:text-2xl font-bold text-gray-800" id="followers">--</div>
-                    <div class="text-gray-600 text-xs md:text-sm">Followers</div>
                 </div>
             </div>
         </div>
@@ -174,17 +186,17 @@
                     <div>
                         <h3 class="text-xl font-semibold text-gray-800 mb-3">Connect With Us</h3>
                         <div class="flex space-x-4">
-                            <a href="https://twitter.com/maestropuns" target="_blank" class="text-gray-700 hover:text-blue-600 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/X_icon_2.svg" alt="X (Twitter)" class="w-8 h-8">
+                            <a href="https://twitter.com/maestropuns" target="_blank" class="social-icon">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/X_icon_2.svg" alt="X (Twitter)">
                             </a>
-                            <a href="https://facebook.com/maestropuns" target="_blank" class="text-gray-700 hover:text-blue-600 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" class="w-8 h-8">
+                            <a href="https://facebook.com/maestropuns" target="_blank" class="social-icon">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
                             </a>
-                            <a href="https://instagram.com/maestropuns" target="_blank" class="text-gray-700 hover:text-blue-600 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="w-8 h-8">
+                            <a href="https://instagram.com/maestropuns" target="_blank" class="social-icon">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
                             </a>
-                            <a href="https://tiktok.com/@maestropuns" target="_blank" class="text-gray-700 hover:text-blue-600 transition">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/TikTok_logo.svg" alt="TikTok" class="w-8 h-8">
+                            <a href="https://tiktok.com/@maestropuns" target="_blank" class="social-icon">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/TikTok_logo_2022.svg" alt="TikTok" style="width: 20px; height: 20px;">
                             </a>
                         </div>
                     </div>
@@ -270,6 +282,7 @@
                     matchData = cachedData;
                     renderMatches();
                     updateLastUpdatedDisplay(cacheTime);
+                    calculateTotalOdds();
                     return;
                 }
 
@@ -312,8 +325,6 @@
 
                 renderMatches();
                 updateLastUpdatedDisplay(lastFetchTime);
-                
-                // Calculate total odds
                 calculateTotalOdds();
             } else {
                 showNoMatches();
@@ -328,13 +339,16 @@
             }
 
             let totalOdds = 1;
+            let validOddsCount = 0;
+            
             matchData.forEach(match => {
                 if (match.odds && !isNaN(parseFloat(match.odds))) {
                     totalOdds *= parseFloat(match.odds);
+                    validOddsCount++;
                 }
             });
 
-            if (totalOdds > 1) {
+            if (validOddsCount > 0) {
                 document.getElementById('successRate').textContent = totalOdds.toFixed(2);
             } else {
                 document.getElementById('successRate').textContent = '--';
@@ -469,8 +483,6 @@
         // Update stats display
         function updateStats() {
             document.getElementById('activeTips').textContent = matchData.length;
-            document.getElementById('winRate').textContent = localStorage.getItem('winRate') || '--%';
-            document.getElementById('followers').textContent = localStorage.getItem('followersCount') || '--';
         }
 
         // Update last updated time display
