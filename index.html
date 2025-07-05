@@ -255,7 +255,7 @@
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0 text-center md:text-left">
-                    <h3 class="text-xl font-bold mb-1">Wekatips</h3>
+                    <h3 class="text-xl font-bold mb-1">Wekatips</h1>
                     <p class="text-gray-400 text-sm">Premium Football Predictions</p>
                 </div>
                 <div class="flex space-x-4 mb-4 md:mb-0">
@@ -329,34 +329,41 @@
         }
 
         async function fetchMatches() {
-            const response = await fetch(`https://raw.githubusercontent.com/${REPO}/${BRANCH}/${FILE_PATH}?t=${Date.now()}`);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            try {
+                const response = await fetch(`https://raw.githubusercontent.com/${REPO}/${BRANCH}/${FILE_PATH}?t=${Date.now()}`);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-            const data = await response.json();
-            if (data.matches?.length > 0) {
-                // Filter out tips older than 24 hours
-                const now = new Date();
-                matchData = data.matches.filter(match => {
-                    const matchDate = new Date(match.createdAt);
-                    const hoursDiff = (now - matchDate) / (1000 * 60 * 60);
-                    return hoursDiff <= 24;
-                }).sort((a, b) => (a.time || '00:00').localeCompare(b.time || '00:00'));
+                const data = await response.json();
                 
-                lastFetchTime = data.updatedAt || new Date().toISOString();
+                if (data && data.matches && data.matches.length > 0) {
+                    // Filter out tips older than 24 hours
+                    const now = new Date();
+                    matchData = data.matches.filter(match => {
+                        if (!match.createdAt) return true; // Keep if no timestamp
+                        const matchDate = new Date(match.createdAt);
+                        const hoursDiff = (now - matchDate) / (1000 * 60 * 60);
+                        return hoursDiff <= 24;
+                    }).sort((a, b) => (a.time || '00:00').localeCompare(b.time || '00:00'));
+                    
+                    lastFetchTime = data.updatedAt || new Date().toISOString();
 
-                localStorage.setItem('cachedMatchData', JSON.stringify(matchData));
-                localStorage.setItem('cacheTimestamp', Date.now());
+                    localStorage.setItem('cachedMatchData', JSON.stringify(matchData));
+                    localStorage.setItem('cacheTimestamp', Date.now());
 
-                renderMatches();
-                updateLastUpdatedDisplay(lastFetchTime);
-                calculateTotalOdds();
-            } else {
+                    renderMatches();
+                    updateLastUpdatedDisplay(lastFetchTime);
+                    calculateTotalOdds();
+                } else {
+                    showNoMatches();
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
                 showNoMatches();
             }
         }
 
         function calculateTotalOdds() {
-            if (!matchData?.length) {
+            if (!matchData || matchData.length === 0) {
                 document.getElementById('successRate').textContent = '--';
                 return;
             }
@@ -370,7 +377,11 @@
 
         function renderMatches() {
             const container = document.getElementById('matchesContainer');
-            if (!matchData?.length) return showNoMatches();
+            
+            if (!matchData || matchData.length === 0) {
+                showNoMatches();
+                return;
+            }
 
             container.innerHTML = '';
             matchData.forEach(match => {
@@ -409,26 +420,26 @@
                                 <i class="fas fa-futbol ${confidenceColor} text-sm"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold text-gray-800 text-sm md:text-base">${match.league}</h3>
-                                <p class="text-gray-500 text-xs">${match.time}</p>
+                                <h3 class="font-bold text-gray-800 text-sm md:text-base">${match.league || 'Unknown League'}</h3>
+                                <p class="text-gray-500 text-xs">${match.time || '--:--'}</p>
                             </div>
                         </div>
                         <span class="px-2 py-1 rounded-full text-xs font-semibold ${confidenceClass}">
-                            ${match.confidence}
+                            ${match.confidence || 'Medium'}
                         </span>
                     </div>
                     
                     <div class="text-center mb-3">
-                        <h4 class="text-lg md:text-xl font-bold text-gray-800 mb-2">${match.homeTeam} vs ${match.awayTeam}</h4>
+                        <h4 class="text-lg md:text-xl font-bold text-gray-800 mb-2">${match.homeTeam || 'Home'} vs ${match.awayTeam || 'Away'}</h4>
                         <span class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-1 md:px-4 md:py-2 rounded-lg font-semibold text-sm md:text-base">
-                            ${formatTipForDisplay(match.tip)}
+                            ${formatTipForDisplay(match.tip) || 'Unknown Tip'}
                         </span>
                     </div>
                     
                     <div class="bg-gray-50 rounded-lg p-2 mb-3">
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Odds: <span class="font-bold text-gray-800">${match.odds}</span></span>
-                            <span class="text-gray-600">Return: <span class="font-bold text-gray-800">${(parseFloat(match.odds) * 100).toFixed(0)}%</span></span>
+                            <span class="text-gray-600">Odds: <span class="font-bold text-gray-800">${match.odds || '--'}</span></span>
+                            <span class="text-gray-600">Return: <span class="font-bold text-gray-800">${match.odds ? (parseFloat(match.odds) * 100).toFixed(0) + '%' : '--'}</span></span>
                         </div>
                     </div>
                     
@@ -481,7 +492,8 @@
         }
 
         function placeBet(data) {
-            alert(`Recommended bet:\n\n${data.homeTeam} vs ${data.awayTeam}\nTip: ${formatTipForDisplay(data.tip)}\nOdds: ${data.odds}\nTipster: ${data.tipster || 'Maestropuns'}`);
+            const tipsterName = data.tipster ? (data.tipster === 'Pro Tipster' ? 'Maestropuns' : data.tipster) : 'Our Team';
+            alert(`Recommended bet from ${tipsterName}:\n\n${data.homeTeam || 'Home'} vs ${data.awayTeam || 'Away'}\nTip: ${formatTipForDisplay(data.tip) || 'Unknown'}\nOdds: ${data.odds || '--'}`);
         }
     </script>
 </body>
