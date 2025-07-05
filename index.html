@@ -70,7 +70,7 @@
                     </div>
                     <div>
                         <h1 class="text-xl font-bold">Wekatips</h1>
-                        <p class="text-blue-100 text-xs">by Maestropuns</p>
+                        <p class="text-blue-100 text-xs" id="tipsterNameDisplay">by Maestropuns</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -149,7 +149,7 @@
         <section id="about" class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
             <div class="p-6 md:p-8">
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">About Wekatips</h2>
-                
+
                 <div class="space-y-6">
                     <div>
                         <h3 class="text-xl font-semibold text-gray-800 mb-3">What We Offer</h3>
@@ -159,7 +159,7 @@
                             other key factors to deliver high-quality predictions with the best possible odds.
                         </p>
                     </div>
-                    
+
                     <div>
                         <h3 class="text-xl font-semibold text-gray-800 mb-3">Our Mission</h3>
                         <p class="text-gray-600 leading-relaxed">
@@ -168,7 +168,7 @@
                             responsible gambling practices.
                         </p>
                     </div>
-                    
+
                     <div>
                         <h3 class="text-xl font-semibold text-gray-800 mb-3">Contact Information</h3>
                         <div class="space-y-3">
@@ -182,7 +182,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div>
                         <h3 class="text-xl font-semibold text-gray-800 mb-3">Connect With Us</h3>
                         <div class="flex space-x-4">
@@ -227,7 +227,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0 text-center md:text-left">
                     <h3 class="text-xl font-bold mb-1">Wekatips</h3>
-                    <p class="text-gray-400 text-sm">by Maestropuns</p>
+                    <p class="text-gray-400 text-sm" id="footerTipsterName">by Maestropuns</p>
                 </div>
                 <div class="text-center md:text-right">
                     <p class="text-gray-400 text-sm">&copy; <span id="currentYear"></span> All rights reserved.</p>
@@ -320,8 +320,22 @@
                 matchData = data.matches;
                 lastFetchTime = data.updatedAt || new Date().toISOString();
 
+                // Sort matches by time (earliest first)
+                matchData.sort((a, b) => {
+                    const timeA = a.time || '00:00';
+                    const timeB = b.time || '00:00';
+                    return timeA.localeCompare(timeB);
+                });
+
                 localStorage.setItem('cachedMatchData', JSON.stringify(matchData));
                 localStorage.setItem('cacheTimestamp', Date.now());
+
+                // Update tipster name display if available
+                if (data.tipster) {
+                    const tipsterName = data.tipster === 'Pro Tipster' ? 'Maestropuns' : data.tipster;
+                    document.getElementById('tipsterNameDisplay').textContent = `by ${tipsterName}`;
+                    document.getElementById('footerTipsterName').textContent = `by ${tipsterName}`;
+                }
 
                 renderMatches();
                 updateLastUpdatedDisplay(lastFetchTime);
@@ -340,7 +354,7 @@
 
             let totalOdds = 1;
             let validOddsCount = 0;
-            
+
             matchData.forEach(match => {
                 if (match.odds && !isNaN(parseFloat(match.odds))) {
                     totalOdds *= parseFloat(match.odds);
