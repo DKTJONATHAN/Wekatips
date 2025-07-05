@@ -13,15 +13,15 @@
     },
     {
       "league": "Premier League",
-      "homeTeam": "Maua",
-      "awayTeam": "Kiegoi",
+      "homeTeam": ".",
+      "awayTeam": ".",
       "time": "15:00",
       "tip": "Over 2.5 Goals",
-      "odds": 1.75,
+      "odds": 1,
       "confidence": "High",
       "tipster": "Kafangi",
       "createdAt": "2025-07-05T08:54:10.702Z"
     }
   ],
-  "updatedAt": "2025-07-05T08:54:23.865Z"
+  "updatedAt": "2025-07-05T09:37:23.995Z"
 }
