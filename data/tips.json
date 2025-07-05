@@ -2,17 +2,6 @@
   "matches": [
     {
       "league": "Premier League",
-      "homeTeam": "Real madrid",
-      "awayTeam": "Chelsea",
-      "time": "15:00",
-      "tip": "Over 2.5 Goals",
-      "odds": 1.75,
-      "confidence": "High",
-      "tipster": "Maestropuns",
-      "createdAt": "2025-07-05T08:51:38.701Z"
-    },
-    {
-      "league": "Premier League",
       "homeTeam": "Arsenam",
       "awayTeam": "Kmshsj",
       "time": "15:00",
@@ -23,5 +12,5 @@
       "createdAt": "2025-07-05T09:57:12.308Z"
     }
   ],
-  "updatedAt": "2025-07-05T09:58:12.427Z"
+  "updatedAt": "2025-07-05T10:12:53.241Z"
 }
