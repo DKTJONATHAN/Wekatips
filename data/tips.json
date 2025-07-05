@@ -10,7 +10,18 @@
       "confidence": "High",
       "tipster": "Maestropuns",
       "createdAt": "2025-07-05T08:51:38.701Z"
+    },
+    {
+      "league": "Premier League",
+      "homeTeam": "Maua",
+      "awayTeam": "Kiegoi",
+      "time": "15:00",
+      "tip": "Over 2.5 Goals",
+      "odds": 1.75,
+      "confidence": "High",
+      "tipster": "Kafangi",
+      "createdAt": "2025-07-05T08:54:10.702Z"
     }
   ],
-  "updatedAt": "2025-07-05T08:52:43.364Z"
+  "updatedAt": "2025-07-05T08:54:23.865Z"
 }
