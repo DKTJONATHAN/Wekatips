@@ -8,223 +8,218 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- X (Twitter) Icon -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .pulse { animation: pulse 2s infinite; }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
-
-        ::-webkit-scrollbar {
-            width: 8px;
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            50% { box-shadow: 0 0 15px 5px rgba(99, 102, 241, 0.3); }
         }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+        .match-card {
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
+        .match-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
+        .tipster-tag {
+            position: relative;
+            overflow: hidden;
         }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        .social-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-        .social-icon:hover {
-            transform: scale(1.1);
-        }
-        .social-icon i {
-            font-size: 18px;
-        }
-        
-        /* Custom X (Twitter) icon color */
-        .fa-x-twitter {
-            color: #000000;
-        }
-
-        .tipster-badge {
+        .tipster-tag::after {
+            content: '';
             position: absolute;
-            top: -10px;
-            right: -10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            z-index: 1;
+            top: -50%;
+            left: -60%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { left: -60%; }
+            20%, 100% { left: 120%; }
+        }
+        .odds-bubble {
+            animation: float 3s ease-in-out infinite;
+        }
+        .refresh-btn {
+            animation: pulse-glow 2s infinite;
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 font-sans min-h-screen">
     <!-- Header -->
-    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg sticky top-0 z-10">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="flex items-center mb-3 md:mb-0">
-                    <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center mr-3">
-                        <i class="fas fa-futbol text-blue-600 text-lg"></i>
+    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white/20 p-2 rounded-lg">
+                        <i class="fas fa-futbol text-white text-xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold">Wekatips</h1>
-                        <p class="text-blue-100 text-xs">Premium Football Tips</p>
+                        <h1 class="text-xl font-bold tracking-tight">WEKATIPS</h1>
+                        <p class="text-blue-100 text-xs font-medium">Premium Football Predictions</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <div class="text-center">
-                        <div class="text-2xl font-bold text-green-400" id="successRate">--</div>
+                    <div class="hidden md:block text-center bg-white/10 px-3 py-1 rounded-full">
+                        <div class="text-lg font-bold text-green-300" id="successRate">--</div>
                         <p class="text-blue-100 text-xs">Total Odds</p>
                     </div>
                     <a href="https://dktjonathan.github.io/Admin.wekatips" target="_blank" 
-                       class="hidden md:block px-3 py-1 bg-white bg-opacity-20 rounded-lg text-sm hover:bg-opacity-30 transition">
-                        <i class="fas fa-lock mr-1"></i> Admin
+                       class="hidden md:flex items-center space-x-1 bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full text-sm transition-all duration-300">
+                        <i class="fas fa-lock text-xs"></i>
+                        <span>Admin</span>
                     </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-center py-3">
-                <div class="flex space-x-4 md:space-x-6">
-                    <a href="#tips" class="text-gray-700 hover:text-blue-600 font-medium text-sm md:text-base py-2 border-b-2 border-transparent hover:border-blue-600 transition">Today's Tips</a>
-                    <a href="#about" class="text-gray-700 hover:text-blue-600 font-medium text-sm md:text-base py-2 border-b-2 border-transparent hover:border-blue-600 transition">About</a>
-                    <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium text-sm md:text-base py-2 border-b-2 border-transparent hover:border-blue-600 transition">Contact</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
     <!-- Stats Bar -->
-    <section class="bg-white shadow-sm">
-        <div class="container mx-auto px-4 py-4">
-            <div class="grid grid-cols-1 gap-2 md:gap-4 text-center">
-                <div class="p-2">
-                    <div class="text-xl md:text-2xl font-bold text-gray-800" id="activeTips">--</div>
-                    <div class="text-gray-600 text-xs md:text-sm">Today's Tips</div>
+    <div class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="text-center">
+                        <div class="text-xl font-bold text-gray-800" id="activeTips">--</div>
+                        <p class="text-gray-500 text-xs">Today's Tips</p>
+                    </div>
+                    <div class="hidden md:block text-sm text-gray-500">
+                        Updated: <span id="lastUpdatedTime" class="font-medium">--:--</span>
+                    </div>
                 </div>
+                <button onclick="loadMatches(true)" 
+                        class="refresh-btn flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full text-sm transition-all">
+                    <i class="fas fa-sync-alt text-xs"></i>
+                    <span>Refresh</span>
+                </button>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-6">
-        <!-- Today's Tips Section -->
-        <section id="tips">
-            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-                <div class="p-4 md:p-6">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
-                        <div>
-                            <h2 class="text-xl md:text-2xl font-bold text-gray-800">Today's Premium Tips</h2>
-                            <p class="text-gray-600 text-sm md:text-base" id="currentDate">Loading date...</p>
-                        </div>
-                        <div class="flex items-center">
-                            <p class="text-sm text-gray-500 mr-2">
-                                Updated: <span id="lastUpdatedTime">--:--</span>
-                            </p>
-                            <button onclick="loadMatches(true)" 
-                                    class="px-2 md:px-3 py-1 bg-blue-600 text-white rounded-md text-xs md:text-sm hover:bg-blue-700 transition flex items-center">
-                                <i class="fas fa-sync-alt text-xs mr-1"></i> Refresh
-                            </button>
-                        </div>
-                    </div>
+    <main class="container mx-auto px-4 py-8">
+        <!-- Date Display -->
+        <div class="mb-6 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">Today's Premium Tips</h2>
+            <p class="text-gray-500" id="currentDate">Loading date...</p>
+        </div>
 
-                    <div id="matchesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                        <div class="col-span-full text-center py-8">
-                            <div class="animate-pulse flex flex-col items-center">
-                                <i class="fas fa-circle-notch fa-spin text-blue-500 text-3xl mb-3"></i>
-                                <p class="text-gray-600">Loading matches...</p>
+        <!-- Matches Grid -->
+        <div id="matchesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Loading State -->
+            <div class="col-span-full text-center py-12">
+                <div class="flex flex-col items-center justify-center space-y-3">
+                    <i class="fas fa-circle-notch fa-spin text-blue-500 text-4xl"></i>
+                    <p class="text-gray-600">Loading matches...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <section id="about" class="mt-16 bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div class="p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">About Wekatips</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-blue-100 p-3 rounded-full text-blue-600">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Data-Driven Predictions</h3>
+                                <p class="text-gray-600 mt-1">Our team analyzes dozens of factors to provide the most accurate football predictions.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-purple-100 p-3 rounded-full text-purple-600">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Expert Tipsters</h3>
+                                <p class="text-gray-600 mt-1">Each prediction comes from our network of professional tipsters with proven track records.</p>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="about" class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-            <div class="p-6 md:p-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">About Wekatips</h2>
-
-                <div class="space-y-6">
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">What We Offer</h3>
-                        <p class="text-gray-600 leading-relaxed">
-                            Wekatips provides carefully analyzed football betting tips with high success rates.
-                            Our team of expert tipsters analyzes matches from top leagues worldwide to bring you
-                            the most valuable betting opportunities.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Our Tipsters</h3>
-                        <p class="text-gray-600 leading-relaxed">
-                            Our predictions come from a team of professional tipsters with proven track records.
-                            Each tip is clearly labeled with the tipster's name so you can follow your favorite analysts.
-                        </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-green-100 p-3 rounded-full text-green-600">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Quick Updates</h3>
+                                <p class="text-gray-600 mt-1">We update our predictions in real-time as new information becomes available.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-yellow-100 p-3 rounded-full text-yellow-600">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">Transparent Tracking</h3>
+                                <p class="text-gray-600 mt-1">Follow each tipster's performance with our verified results history.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-            <div class="p-6 md:p-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Contact Us</h2>
-
-                <div class="space-y-6">
+        <section id="contact" class="mt-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-lg overflow-hidden text-white">
+            <div class="p-8">
+                <h2 class="text-2xl font-bold mb-6">Contact Us</h2>
+                <div class="grid md:grid-cols-2 gap-8">
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Get In Touch</h3>
-                        <div class="space-y-3">
-                            <div class="flex items-center">
-                                <i class="fas fa-phone-alt text-blue-600 mr-3"></i>
-                                <span class="text-gray-700">0706396305</span>
+                        <h3 class="text-lg font-semibold mb-4">Get In Touch</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="bg-white/20 p-3 rounded-full">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <span>0706396305</span>
                             </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-envelope text-blue-600 mr-3"></i>
-                                <span class="text-gray-700">jonathanmwaniki07@gmail.com</span>
+                            <div class="flex items-center space-x-4">
+                                <div class="bg-white/20 p-3 rounded-full">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <span>jonathanmwaniki07@gmail.com</span>
                             </div>
                         </div>
                     </div>
-
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Follow Us</h3>
-                        <div class="flex space-x-3">
-                            <a href="https://twitter.com/maestropuns" target="_blank" class="social-icon">
-                                <i class="fa-brands fa-x-twitter"></i>
+                        <h3 class="text-lg font-semibold mb-4">Follow Us</h3>
+                        <div class="flex space-x-4">
+                            <a href="https://twitter.com/maestropuns" target="_blank" class="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-all">
+                                <i class="fab fa-x-twitter"></i>
                             </a>
-                            <a href="https://twitter.com/maestropuns" target="_blank" class="social-icon">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                            <a href="https://facebook.com/maestropuns" target="_blank" class="social-icon">
+                            <a href="https://facebook.com/maestropuns" target="_blank" class="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-all">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="https://instagram.com/maestropuns" target="_blank" class="social-icon">
+                            <a href="https://instagram.com/maestropuns" target="_blank" class="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-all">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                            <a href="https://t.me/maestropuns" target="_blank" class="social-icon">
+                            <a href="https://t.me/maestropuns" target="_blank" class="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-all">
                                 <i class="fab fa-telegram"></i>
                             </a>
                         </div>
@@ -234,16 +229,17 @@
         </section>
 
         <!-- Disclaimer -->
-        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
-            <div class="flex">
+        <div class="mt-12 bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-lg">
+            <div class="flex items-start space-x-4">
                 <div class="flex-shrink-0 pt-1">
-                    <i class="fas fa-exclamation-triangle text-yellow-400 text-lg mr-3"></i>
+                    <i class="fas fa-exclamation-triangle text-yellow-500 text-xl"></i>
                 </div>
                 <div>
-                    <h3 class="text-base md:text-lg font-medium text-yellow-800">Important Disclaimer</h3>
-                    <p class="text-yellow-700 text-sm md:text-base mt-1">
+                    <h3 class="text-lg font-medium text-yellow-800">Important Disclaimer</h3>
+                    <p class="text-yellow-700 mt-2">
                         Betting involves risk. Please gamble responsibly. Only bet what you can afford to lose.
-                        Our predictions are not guaranteed and should be used as guidance only.
+                        Our predictions are not guaranteed and should be used as guidance only. We do not encourage
+                        irresponsible gambling and recommend setting strict limits.
                     </p>
                 </div>
             </div>
@@ -251,27 +247,38 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-6">
+    <footer class="bg-gray-800 text-white py-8 mt-12">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0 text-center md:text-left">
-                    <h3 class="text-xl font-bold mb-1">Wekatips</h1>
-                    <p class="text-gray-400 text-sm">Premium Football Predictions</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Wekatips</h3>
+                    <p class="text-gray-400">Premium football predictions from trusted tipsters.</p>
                 </div>
-                <div class="flex space-x-4 mb-4 md:mb-0">
-                    <a href="https://twitter.com/maestropuns" target="_blank" class="text-gray-400 hover:text-white">
-                        <i class="fa-brands fa-x-twitter"></i>
-                    </a>
-                    <a href="https://facebook.com/maestropuns" target="_blank" class="text-gray-400 hover:text-white">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="https://instagram.com/maestropuns" target="_blank" class="text-gray-400 hover:text-white">
-                        <i class="fab fa-instagram"></i>
-                    </a>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#tips" class="text-gray-400 hover:text-white transition">Today's Tips</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
                 </div>
-                <div class="text-center md:text-right">
-                    <p class="text-gray-400 text-sm">&copy; <span id="currentYear"></span> All rights reserved.</p>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://twitter.com/maestropuns" target="_blank" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-x-twitter"></i>
+                        </a>
+                        <a href="https://facebook.com/maestropuns" target="_blank" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://instagram.com/maestropuns" target="_blank" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
                 </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>&copy; <span id="currentYear"></span> Wekatips. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -293,9 +300,9 @@
         async function loadMatches(forceRefresh = false) {
             const container = document.getElementById('matchesContainer');
             container.innerHTML = `
-                <div class="col-span-full text-center py-8">
-                    <div class="animate-pulse flex flex-col items-center">
-                        <i class="fas fa-circle-notch fa-spin text-blue-500 text-3xl mb-3"></i>
+                <div class="col-span-full text-center py-12">
+                    <div class="flex flex-col items-center justify-center space-y-3 animate-pulse">
+                        <i class="fas fa-circle-notch fa-spin text-blue-500 text-4xl"></i>
                         <p class="text-gray-600">Loading matches...</p>
                     </div>
                 </div>
@@ -314,13 +321,14 @@
             } catch (error) {
                 console.error("Loading error:", error);
                 container.innerHTML = `
-                    <div class="col-span-full text-center py-8">
-                        <div class="flex flex-col items-center">
-                            <i class="fas fa-exclamation-triangle text-red-500 text-3xl mb-3"></i>
-                            <p class="text-gray-600 mb-3">Failed to load matches</p>
+                    <div class="col-span-full text-center py-12">
+                        <div class="flex flex-col items-center justify-center space-y-4">
+                            <i class="fas fa-exclamation-triangle text-red-400 text-4xl"></i>
+                            <h3 class="text-lg font-medium text-gray-700">Failed to load matches</h3>
                             <button onclick="loadMatches(true)" 
-                                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
-                                <i class="fas fa-redo mr-2"></i> Try Again
+                                    class="refresh-btn flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full transition-all">
+                                <i class="fas fa-redo"></i>
+                                <span>Try Again</span>
                             </button>
                         </div>
                     </div>
@@ -384,15 +392,17 @@
             }
 
             container.innerHTML = '';
-            matchData.forEach(match => {
-                container.appendChild(createMatchCard(match));
+            matchData.forEach((match, index) => {
+                setTimeout(() => {
+                    container.appendChild(createMatchCard(match));
+                }, index * 100); // Staggered animation
             });
             document.getElementById('activeTips').textContent = matchData.length;
         }
 
         function createMatchCard(match) {
             const card = document.createElement('div');
-            card.className = 'bg-white rounded-lg shadow-md overflow-hidden fade-in hover:shadow-lg transition relative';
+            card.className = 'match-card bg-white rounded-xl shadow-md overflow-hidden fade-in animate__animated animate__fadeInUp';
 
             let confidenceClass = 'bg-gray-100 text-gray-800';
             let confidenceColor = 'text-gray-500';
@@ -404,49 +414,53 @@
                 confidenceColor = 'text-blue-500';
             }
 
-            // Add tipster badge if available
-            const tipsterBadge = match.tipster ? `
-                <div class="tipster-badge">
-                    ${match.tipster === 'Pro Tipster' ? 'Maestropuns' : match.tipster}
+            // Tipster display with shine effect
+            const tipsterName = match.tipster ? (match.tipster === 'Pro Tipster' ? 'Maestropuns' : match.tipster) : 'Wekatips Team';
+            const tipsterDisplay = `
+                <div class="absolute top-4 left-4">
+                    <div class="tipster-tag bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                        ${tipsterName}
+                    </div>
                 </div>
-            ` : '';
+            `;
 
             card.innerHTML = `
-                ${tipsterBadge}
-                <div class="p-4 md:p-5">
-                    <div class="flex justify-between items-start mb-3">
-                        <div class="flex items-center">
-                            <div class="bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                                <i class="fas fa-futbol ${confidenceColor} text-sm"></i>
+                ${tipsterDisplay}
+                <div class="p-6 pt-14 relative">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="bg-gray-100 p-2 rounded-lg ${confidenceColor}">
+                                <i class="fas fa-futbol"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold text-gray-800 text-sm md:text-base">${match.league || 'Unknown League'}</h3>
-                                <p class="text-gray-500 text-xs">${match.time || '--:--'}</p>
+                                <h3 class="text-sm font-semibold text-gray-500">${match.league || 'Unknown League'}</h3>
+                                <p class="text-xs text-gray-400">${match.time || '--:--'}</p>
                             </div>
                         </div>
-                        <span class="px-2 py-1 rounded-full text-xs font-semibold ${confidenceClass}">
-                            ${match.confidence || 'Medium'}
+                        <span class="text-xs font-medium ${confidenceClass} px-2 py-1 rounded-full">
+                            ${match.confidence || 'Medium'} Confidence
                         </span>
                     </div>
                     
-                    <div class="text-center mb-3">
-                        <h4 class="text-lg md:text-xl font-bold text-gray-800 mb-2">${match.homeTeam || 'Home'} vs ${match.awayTeam || 'Away'}</h4>
-                        <span class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-1 md:px-4 md:py-2 rounded-lg font-semibold text-sm md:text-base">
+                    <div class="text-center my-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-3">${match.homeTeam || 'Home'} vs ${match.awayTeam || 'Away'}</h4>
+                        <div class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full font-bold text-sm">
                             ${formatTipForDisplay(match.tip) || 'Unknown Tip'}
-                        </span>
-                    </div>
-                    
-                    <div class="bg-gray-50 rounded-lg p-2 mb-3">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Odds: <span class="font-bold text-gray-800">${match.odds || '--'}</span></span>
-                            <span class="text-gray-600">Return: <span class="font-bold text-gray-800">${match.odds ? (parseFloat(match.odds) * 100).toFixed(0) + '%' : '--'}</span></span>
                         </div>
                     </div>
                     
-                    <button onclick="placeBet(${JSON.stringify(match).replace(/"/g, '&quot;')})" 
-                            class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-2 rounded-lg font-medium transition text-sm md:text-base">
-                        <i class="fas fa-coins mr-2"></i> Place Bet
-                    </button>
+                    <div class="flex justify-between items-center mt-8">
+                        <div class="text-center">
+                            <p class="text-xs text-gray-500">Odds</p>
+                            <div class="odds-bubble bg-gradient-to-br from-blue-500 to-blue-600 text-white w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold mt-1">
+                                ${match.odds || '--'}
+                            </div>
+                        </div>
+                        <button onclick="placeBet(${JSON.stringify(match).replace(/"/g, '&quot;')})" 
+                                class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-2 rounded-full font-medium transition-all transform hover:scale-105">
+                            Place Bet
+                        </button>
+                    </div>
                 </div>
             `;
             return card;
@@ -463,13 +477,14 @@
 
         function showNoMatches() {
             document.getElementById('matchesContainer').innerHTML = `
-                <div class="col-span-full text-center py-8">
-                    <div class="flex flex-col items-center">
-                        <i class="fas fa-calendar-times text-gray-400 text-3xl mb-3"></i>
-                        <h3 class="text-lg font-medium text-gray-700 mb-1">No Matches Today</h3>
+                <div class="col-span-full text-center py-12">
+                    <div class="flex flex-col items-center justify-center space-y-4">
+                        <i class="fas fa-calendar-times text-gray-400 text-4xl"></i>
+                        <h3 class="text-lg font-medium text-gray-700">No Matches Today</h3>
                         <button onclick="loadMatches(true)" 
-                                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
-                            <i class="fas fa-sync-alt mr-2"></i> Refresh
+                                class="refresh-btn flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full transition-all">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Refresh</span>
                         </button>
                     </div>
                 </div>
@@ -493,7 +508,49 @@
 
         function placeBet(data) {
             const tipsterName = data.tipster ? (data.tipster === 'Pro Tipster' ? 'Maestropuns' : data.tipster) : 'Our Team';
-            alert(`Recommended bet from ${tipsterName}:\n\n${data.homeTeam || 'Home'} vs ${data.awayTeam || 'Away'}\nTip: ${formatTipForDisplay(data.tip) || 'Unknown'}\nOdds: ${data.odds || '--'}`);
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate__animated animate__fadeIn';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 animate__animated animate__zoomIn">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">Bet Recommendation</h3>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-medium">${data.homeTeam || 'Home'} vs ${data.awayTeam || 'Away'}</p>
+                            <p class="text-sm text-gray-600 mt-1">${data.league || 'Unknown League'} • ${data.time || '--:--'}</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-blue-50 p-3 rounded-lg">
+                                <p class="text-sm text-gray-600">Tip</p>
+                                <p class="font-bold">${formatTipForDisplay(data.tip) || 'Unknown'}</p>
+                            </div>
+                            <div class="bg-blue-50 p-3 rounded-lg">
+                                <p class="text-sm text-gray-600">Odds</p>
+                                <p class="font-bold">${data.odds || '--'}</p>
+                            </div>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded-lg">
+                            <p class="text-sm text-gray-600">Tipster</p>
+                            <p class="font-bold text-purple-600">${tipsterName}</p>
+                        </div>
+                        <div class="flex space-x-3 pt-4">
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                    class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 rounded-lg transition">
+                                Close
+                            </button>
+                            <button onclick="window.open('https://www.betway.com', '_blank')" 
+                                    class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-2 rounded-lg transition">
+                                Bet Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
         }
     </script>
 </body>
