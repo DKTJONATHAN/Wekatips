@@ -10,7 +10,18 @@
       "confidence": "High",
       "tipster": "Kafangi",
       "createdAt": "2025-07-05T09:57:12.308Z"
+    },
+    {
+      "league": "Other Leagues",
+      "homeTeam": "PSG",
+      "awayTeam": "Bayern Munich",
+      "time": "19:00",
+      "tip": "Home Win (1X2)",
+      "odds": 2.45,
+      "confidence": "Very High",
+      "tipster": "Maestropuns",
+      "createdAt": "2025-07-05T10:27:15.717Z"
     }
   ],
-  "updatedAt": "2025-07-05T10:12:53.241Z"
+  "updatedAt": "2025-07-05T10:29:35.784Z"
 }
