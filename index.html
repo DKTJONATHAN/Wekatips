@@ -18,7 +18,6 @@
             50% { opacity: 0.5; }
         }
 
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -33,12 +32,10 @@
             background: #555;
         }
 
-        /* Smooth scrolling for about section */
         html {
             scroll-behavior: smooth;
         }
 
-        /* Social media icon style */
         .social-icon {
             width: 40px;
             height: 40px;
@@ -154,50 +151,28 @@
                     <div>
                         <h3 class="text-xl font-semibold text-gray-800 mb-3">What We Offer</h3>
                         <p class="text-gray-600 leading-relaxed">
-                            Wekatips is a premium football prediction platform that provides carefully analyzed betting tips 
-                            for football matches worldwide. Our team of experts uses statistical analysis, team form, and 
-                            other key factors to deliver high-quality predictions with the best possible odds.
+                            Wekatips provides carefully analyzed football betting tips with high success rates.
                         </p>
                     </div>
 
                     <div>
                         <h3 class="text-xl font-semibold text-gray-800 mb-3">Our Mission</h3>
                         <p class="text-gray-600 leading-relaxed">
-                            Our mission is to help football betting enthusiasts make informed decisions by providing accurate 
-                            predictions and valuable insights. We aim to maintain a high success rate while promoting 
-                            responsible gambling practices.
+                            To help bettors make informed decisions with accurate predictions.
                         </p>
                     </div>
 
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Contact Information</h3>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Contact</h3>
                         <div class="space-y-3">
                             <div class="flex items-center">
                                 <i class="fas fa-phone-alt text-blue-600 mr-3"></i>
-                                <span class="text-gray-700">Mobile: 0706396305</span>
+                                <span class="text-gray-700">0706396305</span>
                             </div>
                             <div class="flex items-center">
                                 <i class="fas fa-envelope text-blue-600 mr-3"></i>
-                                <span class="text-gray-700">Email: jonathanmwaniki07@gmail.com</span>
+                                <span class="text-gray-700">jonathanmwaniki07@gmail.com</span>
                             </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Connect With Us</h3>
-                        <div class="flex space-x-4">
-                            <a href="https://twitter.com/maestropuns" target="_blank" class="social-icon">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/X_icon_2.svg" alt="X (Twitter)">
-                            </a>
-                            <a href="https://facebook.com/maestropuns" target="_blank" class="social-icon">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
-                            </a>
-                            <a href="https://instagram.com/maestropuns" target="_blank" class="social-icon">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-                            </a>
-                            <a href="https://tiktok.com/@maestropuns" target="_blank" class="social-icon">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/TikTok_logo_2022.svg" alt="TikTok" style="width: 20px; height: 20px;">
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -213,8 +188,7 @@
                 <div>
                     <h3 class="text-base md:text-lg font-medium text-yellow-800">Important Disclaimer</h3>
                     <p class="text-yellow-700 text-sm md:text-base mt-1">
-                        Betting involves risk and should be done responsibly. These tips are for entertainment purposes only. 
-                        Please gamble responsibly and never bet more than you can afford to lose. You must be 18+ to participate in betting activities.
+                        Betting involves risk. Please gamble responsibly.
                     </p>
                 </div>
             </div>
@@ -231,32 +205,25 @@
                 </div>
                 <div class="text-center md:text-right">
                     <p class="text-gray-400 text-sm">&copy; <span id="currentYear"></span> All rights reserved.</p>
-                    <p class="text-gray-400 text-xs mt-1">Bet Responsibly | 18+</p>
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // Configuration - Update these to match your repo
         const REPO = 'DKTJONATHAN/Wekatips';
         const FILE_PATH = 'data/tips.json';
         const BRANCH = 'main';
 
-        // Global variables
         let matchData = [];
         let lastFetchTime = null;
 
-        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             updateDate();
             loadMatches();
-
-            // Refresh every 5 minutes
             setInterval(() => loadMatches(), 300000);
         });
 
-        // Main loading function
         async function loadMatches(forceRefresh = false) {
             const container = document.getElementById('matchesContainer');
             container.innerHTML = `
@@ -269,25 +236,15 @@
             `;
 
             try {
-                if (forceRefresh) {
+                if (forceRefresh || !localStorage.getItem('cacheTimestamp') || 
+                    Date.now() - localStorage.getItem('cacheTimestamp') > 300000) {
                     await fetchMatches();
-                    return;
-                }
-
-                // Check cache first
-                const cachedData = JSON.parse(localStorage.getItem('cachedMatchData'));
-                const cacheTime = localStorage.getItem('cacheTimestamp');
-
-                if (cachedData && cacheTime && (Date.now() - cacheTime < 300000)) {
-                    matchData = cachedData;
+                } else {
+                    matchData = JSON.parse(localStorage.getItem('cachedMatchData'));
                     renderMatches();
-                    updateLastUpdatedDisplay(cacheTime);
+                    updateLastUpdatedDisplay(localStorage.getItem('cacheTimestamp'));
                     calculateTotalOdds();
-                    return;
                 }
-
-                await fetchMatches();
-
             } catch (error) {
                 console.error("Loading error:", error);
                 container.innerHTML = `
@@ -296,7 +253,7 @@
                             <i class="fas fa-exclamation-triangle text-red-500 text-3xl mb-3"></i>
                             <p class="text-gray-600 mb-3">Failed to load matches</p>
                             <button onclick="loadMatches(true)" 
-                                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition flex items-center">
+                                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
                                 <i class="fas fa-redo mr-2"></i> Try Again
                             </button>
                         </div>
@@ -305,36 +262,22 @@
             }
         }
 
-        // Fetch matches from GitHub
         async function fetchMatches() {
             const response = await fetch(`https://raw.githubusercontent.com/${REPO}/${BRANCH}/${FILE_PATH}?t=${Date.now()}`);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
             const data = await response.json();
-
-            if (data.matches && data.matches.length > 0) {
-                // Update cache
-                matchData = data.matches;
+            if (data.matches?.length > 0) {
+                matchData = data.matches.sort((a, b) => (a.time || '00:00').localeCompare(b.time || '00:00'));
                 lastFetchTime = data.updatedAt || new Date().toISOString();
-
-                // Sort matches by time (earliest first)
-                matchData.sort((a, b) => {
-                    const timeA = a.time || '00:00';
-                    const timeB = b.time || '00:00';
-                    return timeA.localeCompare(timeB);
-                });
 
                 localStorage.setItem('cachedMatchData', JSON.stringify(matchData));
                 localStorage.setItem('cacheTimestamp', Date.now());
 
-                // Update tipster name display if available
                 if (data.tipster) {
-                    const tipsterName = data.tipster === 'Pro Tipster' ? 'Maestropuns' : data.tipster;
-                    document.getElementById('tipsterNameDisplay').textContent = `by ${tipsterName}`;
-                    document.getElementById('footerTipsterName').textContent = `by ${tipsterName}`;
+                    const displayName = data.tipster === 'Pro Tipster' ? 'Maestropuns' : data.tipster;
+                    document.getElementById('tipsterNameDisplay').textContent = `by ${displayName}`;
+                    document.getElementById('footerTipsterName').textContent = `by ${displayName}`;
                 }
 
                 renderMatches();
@@ -345,71 +288,43 @@
             }
         }
 
-        // Calculate total odds for all matches
         function calculateTotalOdds() {
-            if (!matchData || matchData.length === 0) {
+            if (!matchData?.length) {
                 document.getElementById('successRate').textContent = '--';
                 return;
             }
 
-            let totalOdds = 1;
-            let validOddsCount = 0;
+            const totalOdds = matchData.reduce((acc, match) => {
+                return acc * (parseFloat(match.odds) || 1;
+            }, 1);
 
-            matchData.forEach(match => {
-                if (match.odds && !isNaN(parseFloat(match.odds))) {
-                    totalOdds *= parseFloat(match.odds);
-                    validOddsCount++;
-                }
-            });
-
-            if (validOddsCount > 0) {
-                document.getElementById('successRate').textContent = totalOdds.toFixed(2);
-            } else {
-                document.getElementById('successRate').textContent = '--';
-            }
+            document.getElementById('successRate').textContent = totalOdds.toFixed(2);
         }
 
-        // Render matches to the page
         function renderMatches() {
             const container = document.getElementById('matchesContainer');
-
-            if (!matchData || matchData.length === 0) {
-                showNoMatches();
-                return;
-            }
+            if (!matchData?.length) return showNoMatches();
 
             container.innerHTML = '';
-
-            matchData.forEach((match, index) => {
-                const matchCard = createMatchCard(match, index);
-                container.appendChild(matchCard);
+            matchData.forEach(match => {
+                container.appendChild(createMatchCard(match));
             });
-
-            // Update stats
-            updateStats();
+            document.getElementById('activeTips').textContent = matchData.length;
         }
 
-        // Create match card element
-        function createMatchCard(match, index) {
+        function createMatchCard(match) {
             const card = document.createElement('div');
             card.className = 'bg-white rounded-lg shadow-md overflow-hidden fade-in hover:shadow-lg transition';
 
-            // Determine confidence badge color
-            let confidenceClass = '';
-            let confidenceColor = '';
+            let confidenceClass = 'bg-gray-100 text-gray-800';
+            let confidenceColor = 'text-gray-500';
             if (match.confidence === 'High') {
                 confidenceClass = 'bg-green-100 text-green-800';
                 confidenceColor = 'text-green-500';
-            } else if (match.confidence === 'Medium') {
-                confidenceClass = 'bg-yellow-100 text-yellow-800';
-                confidenceColor = 'text-yellow-500';
             } else if (match.confidence === 'Very High') {
                 confidenceClass = 'bg-blue-100 text-blue-800';
                 confidenceColor = 'text-blue-500';
             }
-
-            // Format the tip display
-            const formattedTip = formatTipForDisplay(match.tip);
 
             card.innerHTML = `
                 <div class="p-4 md:p-5">
@@ -431,7 +346,7 @@
                     <div class="text-center mb-3">
                         <h4 class="text-lg md:text-xl font-bold text-gray-800 mb-2">${match.homeTeam} vs ${match.awayTeam}</h4>
                         <span class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-1 md:px-4 md:py-2 rounded-lg font-semibold text-sm md:text-base">
-                            ${formattedTip}
+                            ${formatTipForDisplay(match.tip)}
                         </span>
                     </div>
                     
@@ -448,97 +363,50 @@
                     </button>
                 </div>
             `;
-
             return card;
         }
 
-        // Format different tip types for display
         function formatTipForDisplay(tip) {
             if (!tip) return 'Unknown Tip';
-
-            if (tip.includes('Over')) {
-                const value = tip.match(/\d\.\d/)?.[0] || 'X.5';
-                return `Over ${value} Goals`;
-            } else if (tip.includes('Under')) {
-                const value = tip.match(/\d\.\d/)?.[0] || 'X.5';
-                return `Under ${value} Goals`;
-            } else if (tip.includes('BTTS - Yes')) {
-                return 'Both Teams To Score';
-            } else if (tip.includes('BTTS - No')) {
-                return 'BTTS: No';
-            } else if (tip.includes('Win (1X2)')) {
-                return tip.replace(' (1X2)', ' Win');
-            } else if (tip.includes('Draw (1X2)')) {
-                return 'Draw';
-            }
+            if (tip.includes('Over')) return tip.replace(' Goals', '');
+            if (tip.includes('Under')) return tip.replace(' Goals', '');
+            if (tip.includes('BTTS - Yes')) return 'Both Teams To Score';
+            if (tip.includes('Win (1X2)')) return tip.replace(' (1X2)', ' Win');
             return tip;
         }
 
-        // Show "no matches" message
         function showNoMatches() {
             document.getElementById('matchesContainer').innerHTML = `
                 <div class="col-span-full text-center py-8">
                     <div class="flex flex-col items-center">
                         <i class="fas fa-calendar-times text-gray-400 text-3xl mb-3"></i>
                         <h3 class="text-lg font-medium text-gray-700 mb-1">No Matches Today</h3>
-                        <p class="text-gray-500 mb-3">Check back later for updated tips</p>
                         <button onclick="loadMatches(true)" 
-                                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition flex items-center">
+                                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
                             <i class="fas fa-sync-alt mr-2"></i> Refresh
                         </button>
                     </div>
                 </div>
             `;
             document.getElementById('activeTips').textContent = '0';
-            document.getElementById('lastUpdatedTime').textContent = '--:--';
             document.getElementById('successRate').textContent = '--';
         }
 
-        // Update stats display
-        function updateStats() {
-            document.getElementById('activeTips').textContent = matchData.length;
-        }
-
-        // Update last updated time display
         function updateLastUpdatedDisplay(timestamp) {
-            const timeEl = document.getElementById('lastUpdatedTime');
-            if (!timestamp) {
-                timeEl.textContent = '--:--';
-                return;
-            }
-
-            const date = new Date(timestamp);
-            timeEl.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const date = timestamp ? new Date(timestamp) : new Date();
+            document.getElementById('lastUpdatedTime').textContent = 
+                date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
 
-        // Update current date
         function updateDate() {
             const now = new Date();
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            };
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+            document.getElementById('currentDate').textContent = 
+                now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             document.getElementById('currentYear').textContent = now.getFullYear();
         }
 
-        // Place bet handler
         function placeBet(data) {
-            const formattedTip = formatTipForDisplay(data.tip);
-            const message = `
-                Recommended bet:
-                \n\n${data.homeTeam} vs ${data.awayTeam}
-                \nLeague: ${data.league}
-                \nTime: ${data.time}
-                \nTip: ${formattedTip}
-                \nOdds: ${data.odds}
-                \nPotential Return: ${(parseFloat(data.odds) * 100).toFixed(0)}%
-                \n\nRemember to bet responsibly!
-            `;
-
-            alert(message);
+            alert(`Recommended bet:\n\n${data.homeTeam} vs ${data.awayTeam}\nTip: ${formatTipForDisplay(data.tip)}\nOdds: ${data.odds}`);
         }
     </script>
 </body>
