@@ -12,7 +12,7 @@
       "createdAt": "2025-07-05T09:57:12.308Z"
     },
     {
-      "league": "Premier League",
+      "league": "Other Leagues",
       "homeTeam": "Real Madrid",
       "awayTeam": "Borussia Dortmund",
       "time": "11:00",
@@ -34,5 +34,5 @@
       "createdAt": "2025-07-05T10:27:15.717Z"
     }
   ],
-  "updatedAt": "2025-07-05T10:51:36.465Z"
+  "updatedAt": "2025-07-05T10:51:44.749Z"
 }
