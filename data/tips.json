@@ -2,40 +2,13 @@
   "matches": [
     {
       "league": "Premier League",
-      "homeTeam": "Chelsea",
-      "awayTeam": "Man utd",
-      "time": "15:00",
-      "tip": "Over 2.5 Goals",
-      "odds": 1.75,
-      "confidence": "High"
-    },
-    {
-      "league": "Premier League",
-      "homeTeam": "Man city",
-      "awayTeam": "New castle",
-      "time": "15:00",
-      "tip": "Over 2.5 Goals",
-      "odds": 1.75,
-      "confidence": "High"
-    },
-    {
-      "league": "Premier League",
-      "homeTeam": "Ituni",
-      "awayTeam": "Maus",
-      "time": "15:00",
-      "tip": "Over 2.5 Goals",
-      "odds": 1.75,
-      "confidence": "High"
-    },
-    {
-      "league": "Premier League",
-      "homeTeam": "Mugo",
-      "awayTeam": "Timo",
+      "homeTeam": "God",
+      "awayTeam": "Kdodh",
       "time": "15:00",
       "tip": "Over 2.5 Goals",
       "odds": 1.75,
       "confidence": "High"
     }
   ],
-  "updatedAt": "2025-07-05T01:04:56.445Z"
+  "updatedAt": "2025-07-05T01:08:19.704Z"
 }
