@@ -1,0 +1,23 @@
+{
+  "matches": [
+    {
+      "league": "Premier League",
+      "homeTeam": "Chelsea",
+      "awayTeam": "Man utd",
+      "time": "15:00",
+      "tip": "Over 2.5 Goals",
+      "odds": 1.75,
+      "confidence": "High"
+    },
+    {
+      "league": "Premier League",
+      "homeTeam": "Man city",
+      "awayTeam": "New castle",
+      "time": "15:00",
+      "tip": "Over 2.5 Goals",
+      "odds": 1.75,
+      "confidence": "High"
+    }
+  ],
+  "updatedAt": "2025-07-05T01:01:21.334Z"
+}
