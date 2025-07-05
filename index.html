@@ -60,6 +60,20 @@
         .fa-x-twitter {
             color: #000000;
         }
+
+        .tipster-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -73,7 +87,7 @@
                     </div>
                     <div>
                         <h1 class="text-xl font-bold">Wekatips</h1>
-                        <p class="text-blue-100 text-xs" id="tipsterNameDisplay">by Maestropuns</p>
+                        <p class="text-blue-100 text-xs">Premium Football Tips</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -165,11 +179,10 @@
                     </div>
 
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Our Mission</h3>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Our Tipsters</h3>
                         <p class="text-gray-600 leading-relaxed">
-                            To help bettors make informed decisions with accurate predictions and comprehensive
-                            match analysis. We focus on quality over quantity, providing only the most confident
-                            predictions.
+                            Our predictions come from a team of professional tipsters with proven track records.
+                            Each tip is clearly labeled with the tipster's name so you can follow your favorite analysts.
                         </p>
                     </div>
                 </div>
@@ -243,7 +256,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0 text-center md:text-left">
                     <h3 class="text-xl font-bold mb-1">Wekatips</h3>
-                    <p class="text-gray-400 text-sm" id="footerTipsterName">by Maestropuns</p>
+                    <p class="text-gray-400 text-sm">Premium Football Predictions</p>
                 </div>
                 <div class="flex space-x-4 mb-4 md:mb-0">
                     <a href="https://twitter.com/maestropuns" target="_blank" class="text-gray-400 hover:text-white">
@@ -321,17 +334,18 @@
 
             const data = await response.json();
             if (data.matches?.length > 0) {
-                matchData = data.matches.sort((a, b) => (a.time || '00:00').localeCompare(b.time || '00:00'));
+                // Filter out tips older than 24 hours
+                const now = new Date();
+                matchData = data.matches.filter(match => {
+                    const matchDate = new Date(match.createdAt);
+                    const hoursDiff = (now - matchDate) / (1000 * 60 * 60);
+                    return hoursDiff <= 24;
+                }).sort((a, b) => (a.time || '00:00').localeCompare(b.time || '00:00'));
+                
                 lastFetchTime = data.updatedAt || new Date().toISOString();
 
                 localStorage.setItem('cachedMatchData', JSON.stringify(matchData));
                 localStorage.setItem('cacheTimestamp', Date.now());
-
-                if (data.tipster) {
-                    const displayName = data.tipster === 'Pro Tipster' ? 'Maestropuns' : data.tipster;
-                    document.getElementById('tipsterNameDisplay').textContent = `by ${displayName}`;
-                    document.getElementById('footerTipsterName').textContent = `by ${displayName}`;
-                }
 
                 renderMatches();
                 updateLastUpdatedDisplay(lastFetchTime);
@@ -348,7 +362,7 @@
             }
 
             const totalOdds = matchData.reduce((acc, match) => {
-                return acc * (parseFloat(match.odds) || 1;
+                return acc * (parseFloat(match.odds) || 1);
             }, 1);
 
             document.getElementById('successRate').textContent = totalOdds.toFixed(2);
@@ -367,7 +381,7 @@
 
         function createMatchCard(match) {
             const card = document.createElement('div');
-            card.className = 'bg-white rounded-lg shadow-md overflow-hidden fade-in hover:shadow-lg transition';
+            card.className = 'bg-white rounded-lg shadow-md overflow-hidden fade-in hover:shadow-lg transition relative';
 
             let confidenceClass = 'bg-gray-100 text-gray-800';
             let confidenceColor = 'text-gray-500';
@@ -379,7 +393,15 @@
                 confidenceColor = 'text-blue-500';
             }
 
+            // Add tipster badge if available
+            const tipsterBadge = match.tipster ? `
+                <div class="tipster-badge">
+                    ${match.tipster === 'Pro Tipster' ? 'Maestropuns' : match.tipster}
+                </div>
+            ` : '';
+
             card.innerHTML = `
+                ${tipsterBadge}
                 <div class="p-4 md:p-5">
                     <div class="flex justify-between items-start mb-3">
                         <div class="flex items-center">
@@ -459,7 +481,7 @@
         }
 
         function placeBet(data) {
-            alert(`Recommended bet:\n\n${data.homeTeam} vs ${data.awayTeam}\nTip: ${formatTipForDisplay(data.tip)}\nOdds: ${data.odds}`);
+            alert(`Recommended bet:\n\n${data.homeTeam} vs ${data.awayTeam}\nTip: ${formatTipForDisplay(data.tip)}\nOdds: ${data.odds}\nTipster: ${data.tipster || 'Maestropuns'}`);
         }
     </script>
 </body>
