@@ -1,23 +1,16 @@
 {
   "matches": [
     {
-      "league": "Other Leagues",
-      "homeTeam": "PSG",
-      "awayTeam": "Bayern Munich",
-      "time": "19:00",
-      "tip": "Home Win (1X2)",
-      "odds": 2.64,
-      "confidence": "High"
-    },
-    {
-      "league": "Champions League",
-      "homeTeam": "Real Madrid",
-      "awayTeam": "Borussia Dortmund",
-      "time": "23:00",
-      "tip": "Home Win & Over 2.5",
-      "odds": 2.65,
-      "confidence": "High"
+      "league": "Premier League",
+      "homeTeam": "Real madrid",
+      "awayTeam": "Chelsea",
+      "time": "15:00",
+      "tip": "Over 2.5 Goals",
+      "odds": 1.75,
+      "confidence": "High",
+      "tipster": "Maestropuns",
+      "createdAt": "2025-07-05T08:51:38.701Z"
     }
   ],
-  "updatedAt": "2025-07-05T06:42:48.247Z"
+  "updatedAt": "2025-07-05T08:52:43.364Z"
 }
