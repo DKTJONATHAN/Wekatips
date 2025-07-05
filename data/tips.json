@@ -2,15 +2,6 @@
   "matches": [
     {
       "league": "Premier League",
-      "homeTeam": "God",
-      "awayTeam": "Kdodh",
-      "time": "15:00",
-      "tip": "Over 2.5 Goals",
-      "odds": 1.75,
-      "confidence": "High"
-    },
-    {
-      "league": "Premier League",
       "homeTeam": "Maua",
       "awayTeam": "Timau",
       "time": "15:00",
@@ -19,5 +10,5 @@
       "confidence": "High"
     }
   ],
-  "updatedAt": "2025-07-05T01:10:12.504Z"
+  "updatedAt": "2025-07-05T01:11:31.660Z"
 }
