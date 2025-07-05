@@ -1,32 +1,23 @@
 {
   "matches": [
     {
-      "league": "Premier League",
-      "homeTeam": "Maua",
-      "awayTeam": "Timau",
-      "time": "15:00",
-      "tip": "Over 2.5 Goals",
-      "odds": 1.75,
+      "league": "Other Leagues",
+      "homeTeam": "PSG",
+      "awayTeam": "Bayern Munich",
+      "time": "19:00",
+      "tip": "Home Win (1X2)",
+      "odds": 2.64,
       "confidence": "High"
     },
     {
       "league": "Champions League",
-      "homeTeam": "Chelsea",
-      "awayTeam": "Man utd",
-      "time": "15:00",
-      "tip": "Over 2.5 Goals",
-      "odds": 1.75,
-      "confidence": "High"
-    },
-    {
-      "league": "Premier League",
-      "homeTeam": "Itumi",
-      "awayTeam": "Koegoi",
-      "time": "15:00",
-      "tip": "Over 2.5 Goals",
-      "odds": 1.75,
+      "homeTeam": "Real Madrid",
+      "awayTeam": "Borussia Dortmund",
+      "time": "23:00",
+      "tip": "Home Win & Over 2.5",
+      "odds": 2.65,
       "confidence": "High"
     }
   ],
-  "updatedAt": "2025-07-05T01:14:29.552Z"
+  "updatedAt": "2025-07-05T06:42:48.247Z"
 }
