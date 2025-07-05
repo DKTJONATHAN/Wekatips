@@ -17,7 +17,25 @@
       "tip": "Over 2.5 Goals",
       "odds": 1.75,
       "confidence": "High"
+    },
+    {
+      "league": "Premier League",
+      "homeTeam": "Ituni",
+      "awayTeam": "Maus",
+      "time": "15:00",
+      "tip": "Over 2.5 Goals",
+      "odds": 1.75,
+      "confidence": "High"
+    },
+    {
+      "league": "Premier League",
+      "homeTeam": "Mugo",
+      "awayTeam": "Timo",
+      "time": "15:00",
+      "tip": "Over 2.5 Goals",
+      "odds": 1.75,
+      "confidence": "High"
     }
   ],
-  "updatedAt": "2025-07-05T01:01:21.334Z"
+  "updatedAt": "2025-07-05T01:03:30.409Z"
 }
